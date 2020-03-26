@@ -7,7 +7,8 @@ const int ORANGE_LIGHT2_PIN = 10;
 const int RED_LIGHT2_PIN = 11;
 
 boolean checkTrafficLightsRed() {
-  if (currentStateTrafficLight1 == 3 && currentStateTrafficLight2 == 3) {
+  if (currentStateTrafficLight1 == 3 && currentStateTrafficLight2 == 3
+      && currentStatePedestrianCrossing == 3) {
     return true;
   } else {
     return false;
@@ -15,6 +16,8 @@ boolean checkTrafficLightsRed() {
 }
 
 void setTrafficLightGreen(String trafficLight) {
+  currentStatePedestrianCrossing = 1;
+
   // set light to green
   if (trafficLight == "trafficLight1") {
     ledControlSetLedOff(RED_LIGHT1_PIN);
@@ -32,6 +35,7 @@ void setTrafficLightGreen(String trafficLight) {
 }
 
 void setTrafficLightOrange(String trafficLight) {
+  currentStatePedestrianCrossing = 3;
   if (trafficLight == "trafficLight1") {
     ledControlSetLedOff(RED_LIGHT1_PIN);
     ledControlSetLedOff(GREEN_LIGHT1_PIN);

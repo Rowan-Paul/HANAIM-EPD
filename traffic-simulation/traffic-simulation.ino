@@ -1,3 +1,6 @@
+#include <Servo.h>
+Servo servo;
+
 void setup() {
   serialSetup();  
   stateMachineSetup();

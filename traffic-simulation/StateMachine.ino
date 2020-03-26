@@ -1,9 +1,10 @@
 const int TRAFFIC_LIGHT1_DATA_PIN = 4;
 const int TRAFFIC_LIGHT2_DATA_PIN = 8;
+const int PEDESTRIAN_CROSSING_DATA_PIN = 12;
 
 int currentStateTrafficLight1 = 3;
 int currentStateTrafficLight2 = 3;
-
+int currentStatePedestrianCrossing = 3;
 
 // timers
 unsigned long trafficTimer;
@@ -13,10 +14,29 @@ const unsigned long RED_TIMER_INTERVAL = 2000;
 void stateMachineSetup() {
   buttonSetup(TRAFFIC_LIGHT1_DATA_PIN);
   buttonSetup(TRAFFIC_LIGHT2_DATA_PIN);
+  buttonSetup(PEDESTRIAN_CROSSING_DATA_PIN);
   ledControlSetup();
+  servoSetup();
 }
 
 void stateMachineLoop() {
+  Serial.println(currentStatePedestrianCrossing);
+  // Pedestrian crossing
+  switch (currentStatePedestrianCrossing) {
+    case 1:
+      servoWrite(180);
+      break;
+    case 2:
+
+      break;
+    case 3:
+      servoWrite(0);
+  }
+
+  if (buttonPressed(PEDESTRIAN_CROSSING_DATA_PIN)) {
+    currentStatePedestrianCrossing = 1;
+  }
+
   // Traffic Light 1
   switch (currentStateTrafficLight1) {
     case 1:
@@ -24,9 +44,9 @@ void stateMachineLoop() {
 
       // Wait 5 seconds and switch to orange
       if (timerIsPassed(trafficTimer, ORANGE_TIMER_INTERVAL)) {
-        currentStateTrafficLight1 = 2;
-
         trafficTimer = timerReset();
+
+        currentStateTrafficLight1 = 2;
       }
       break;
     case 2:
@@ -43,6 +63,8 @@ void stateMachineLoop() {
       // Check if button is pressed and all lights are red
       // then switch to green
       if (buttonPressed(TRAFFIC_LIGHT1_DATA_PIN) && checkTrafficLightsRed()) {
+        trafficTimer = timerReset();
+
         currentStateTrafficLight1 = 1;
       }
       break;
@@ -55,9 +77,9 @@ void stateMachineLoop() {
 
       // Wait 5 seconds and switch to orange
       if (timerIsPassed(trafficTimer, ORANGE_TIMER_INTERVAL)) {
-        currentStateTrafficLight2 = 2;
-
         trafficTimer = timerReset();
+
+        currentStateTrafficLight2 = 2;
       }
       break;
     case 2:
@@ -74,6 +96,8 @@ void stateMachineLoop() {
       // Check if button is pressed and all lights are red
       // then switch to green
       if (buttonPressed(TRAFFIC_LIGHT2_DATA_PIN) && checkTrafficLightsRed()) {
+        trafficTimer = timerReset();
+
         currentStateTrafficLight2 = 1;
       }
       break;
