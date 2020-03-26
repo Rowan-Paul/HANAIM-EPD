@@ -1,4 +1,4 @@
-const int SERVOPIN = 13;
+const int SERVOPIN = 3;
 
 void servoSetup() {
   servo.attach(SERVOPIN);

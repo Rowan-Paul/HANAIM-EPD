@@ -1,6 +1,6 @@
-const int TRAFFIC_LIGHT1_DATA_PIN = 4;
-const int TRAFFIC_LIGHT2_DATA_PIN = 8;
-const int PEDESTRIAN_CROSSING_DATA_PIN = 12;
+const int TRAFFIC_LIGHT1_DATA_PIN = A5;
+const int TRAFFIC_LIGHT2_DATA_PIN = A4;
+const int PEDESTRIAN_CROSSING_DATA_PIN = A3;
 
 int currentStateTrafficLight1 = 3;
 int currentStateTrafficLight2 = 3;
@@ -16,21 +16,23 @@ void stateMachineSetup() {
   buttonSetup(TRAFFIC_LIGHT2_DATA_PIN);
   buttonSetup(PEDESTRIAN_CROSSING_DATA_PIN);
   ledControlSetup();
+  buzzerSetup();
   servoSetup();
 }
 
 void stateMachineLoop() {
-  Serial.println(currentStatePedestrianCrossing);
   // Pedestrian crossing
   switch (currentStatePedestrianCrossing) {
     case 1:
       servoWrite(180);
+      buzzerFastSound();
       break;
     case 2:
 
       break;
     case 3:
       servoWrite(0);
+      buzzerSlowSound();
   }
 
   if (buttonPressed(PEDESTRIAN_CROSSING_DATA_PIN)) {

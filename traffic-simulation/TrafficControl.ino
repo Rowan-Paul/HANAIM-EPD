@@ -16,8 +16,6 @@ boolean checkTrafficLightsRed() {
 }
 
 void setTrafficLightGreen(String trafficLight) {
-  currentStatePedestrianCrossing = 1;
-
   // set light to green
   if (trafficLight == "trafficLight1") {
     ledControlSetLedOff(RED_LIGHT1_PIN);
