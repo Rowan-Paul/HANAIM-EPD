@@ -1,4 +1,4 @@
-const int buzzer = 2;
+const int BUZZER = 5;
 
 // timers
 unsigned long buzzerTimer;
@@ -6,25 +6,25 @@ const unsigned long SLOW_TIMER_INTERVAL = 1000;
 const unsigned long FAST_TIMER_INTERVAL = 500;
 
 void buzzerSetup() {
-  pinMode(buzzer, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
 }
 
 void buzzerSlowSound() {
-  noTone(buzzer);
+  noTone(BUZZER);
   
   if (timerIsPassed(buzzerTimer, SLOW_TIMER_INTERVAL)) {
     buzzerTimer = timerReset();
 
-    tone(buzzer, 1000);
+    tone(BUZZER, 1000);
   }
 }
 
 void buzzerFastSound() {
-  noTone(buzzer);
+  noTone(BUZZER);
   
   if (timerIsPassed(buzzerTimer, FAST_TIMER_INTERVAL)) {
     buzzerTimer = timerReset();
 
-    tone(buzzer, 1000);
+    tone(BUZZER, 1000);
   }
 }

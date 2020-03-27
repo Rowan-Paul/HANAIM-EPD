@@ -1,5 +1,5 @@
-const int LEDPINSIZE = 8;
-const int LEDPINARRAY [LEDPINSIZE] = {5, 6, 7, 9, 10, 11};
+const int LEDPINSIZE = 6;
+const int LEDPINARRAY [LEDPINSIZE] = {8,9,10,11,12,13};
 
 // Setup all LEDs
 void ledControlSetup() {

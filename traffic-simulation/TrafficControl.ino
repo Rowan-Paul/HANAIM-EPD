@@ -1,10 +1,10 @@
-const int GREEN_LIGHT1_PIN = 5;
-const int ORANGE_LIGHT1_PIN = 6;
-const int RED_LIGHT1_PIN = 7;
+const int GREEN_LIGHT1_PIN = 8;
+const int ORANGE_LIGHT1_PIN = 9;
+const int RED_LIGHT1_PIN = 10;
 
-const int GREEN_LIGHT2_PIN = 9;
-const int ORANGE_LIGHT2_PIN = 10;
-const int RED_LIGHT2_PIN = 11;
+const int GREEN_LIGHT2_PIN = 11;
+const int ORANGE_LIGHT2_PIN = 12;
+const int RED_LIGHT2_PIN = 13;
 
 boolean checkTrafficLightsRed() {
   if (currentStateTrafficLight1 == 3 && currentStateTrafficLight2 == 3
