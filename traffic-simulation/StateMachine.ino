@@ -11,13 +11,26 @@ unsigned long trafficTimer;
 const unsigned long ORANGE_TIMER_INTERVAL = 5000;
 const unsigned long RED_TIMER_INTERVAL = 2000;
 
+// font
+const byte FONTS[] = {
+  B10010010, //3 stripes
+  B00001001, //1
+  B10110011, //2
+  B10011011, //3
+  B11001011, //4
+  B11011010, //5
+  B11111010, //6
+};
+
 void stateMachineSetup() {
   buttonSetup(TRAFFIC_LIGHT1_DATA_PIN);
   buttonSetup(TRAFFIC_LIGHT2_DATA_PIN);
   buttonSetup(PEDESTRIAN_CROSSING_DATA_PIN);
+  
   ledControlSetup();
   buzzerSetup();
   servoSetup();
+  shiftSetup();
 }
 
 void stateMachineLoop() {
@@ -26,6 +39,12 @@ void stateMachineLoop() {
     case 1:
       servoWrite(180);
       buzzerFastSound();
+
+      // show walk sign
+      shiftSetPattern(FONTS[0]);      
+
+      // count down from 6 to 1
+      
       break;
     case 2:
 
@@ -33,6 +52,7 @@ void stateMachineLoop() {
     case 3:
       servoWrite(0);
       buzzerSlowSound();
+      shiftSetAllOff();
   }
 
   if (buttonPressed(PEDESTRIAN_CROSSING_DATA_PIN)) {
