@@ -6,6 +6,25 @@ const int GREEN_LIGHT2_PIN = 11;
 const int ORANGE_LIGHT2_PIN = 12;
 const int RED_LIGHT2_PIN = 13;
 
+// timers
+unsigned long displayTimer;
+const unsigned long DISPLAY_TIMER_INTERVAL = 1000;
+
+int counter = 0;
+
+void countdownDisplay() {
+  if (timerIsPassed(displayTimer, DISPLAY_TIMER_INTERVAL)) {
+    displayTimer = timerReset();
+    
+    counter++;
+    shiftSetPattern(FONTS[counter-1]);
+    if (counter == 8) {
+      currentStatePedestrianCrossing = 3;
+      counter = 0;
+    }
+  }
+}
+
 boolean checkTrafficLightsRed() {
   if (currentStateTrafficLight1 == 3 && currentStateTrafficLight2 == 3
       && currentStatePedestrianCrossing == 3) {

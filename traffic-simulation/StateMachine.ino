@@ -14,12 +14,12 @@ const unsigned long RED_TIMER_INTERVAL = 2000;
 // font
 const byte FONTS[] = {
   B10010010, //3 stripes
-  B00001001, //1
-  B10110011, //2
-  B10011011, //3
-  B11001011, //4
-  B11011010, //5
   B11111010, //6
+  B11011010, //5
+  B11001001, //4
+  B10011011, //3
+  B10110011, //2
+  B00001001, //1
 };
 
 void stateMachineSetup() {
@@ -40,11 +40,9 @@ void stateMachineLoop() {
       servoWrite(180);
       buzzerFastSound();
 
-      // show walk sign
-      shiftSetPattern(FONTS[0]);      
-
+      // show walk sign  
       // count down from 6 to 1
-      
+      countdownDisplay();
       break;
     case 2:
 
@@ -55,7 +53,7 @@ void stateMachineLoop() {
       shiftSetAllOff();
   }
 
-  if (buttonPressed(PEDESTRIAN_CROSSING_DATA_PIN)) {
+  if (buttonPressed(PEDESTRIAN_CROSSING_DATA_PIN) && checkTrafficLightsRed()) {
     currentStatePedestrianCrossing = 1;
   }
 
