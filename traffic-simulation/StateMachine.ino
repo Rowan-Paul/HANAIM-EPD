@@ -5,11 +5,15 @@ const int PEDESTRIAN_CROSSING_DATA_PIN = A3;
 int currentStateTrafficLight1 = 3;
 int currentStateTrafficLight2 = 3;
 int currentStatePedestrianCrossing = 3;
+int currentState = 3;
+
+int ledState = LOW;
 
 // timers
 unsigned long trafficTimer;
 const unsigned long ORANGE_TIMER_INTERVAL = 5000;
 const unsigned long RED_TIMER_INTERVAL = 2000;
+const unsigned long NIGHT_TIMER_INTERVAL = 750;
 
 // font
 const byte FONTS[] = {
@@ -26,21 +30,65 @@ void stateMachineSetup() {
   buttonSetup(TRAFFIC_LIGHT1_DATA_PIN);
   buttonSetup(TRAFFIC_LIGHT2_DATA_PIN);
   buttonSetup(PEDESTRIAN_CROSSING_DATA_PIN);
-  
+
   ledControlSetup();
   buzzerSetup();
   servoSetup();
   shiftSetup();
+  ldrSetup();
 }
 
-void stateMachineLoop() {  
-  // Pedestrian crossing
+void stateMachineLoop() {
+  if(ldrGetValue() > 400) {
+    currentState = 1;
+  } else if (ldrGetValue() < 200) {
+    currentState = 2;
+  }
+
+  switch (currentState) {
+    case 1:
+      servoWrite(180);
+      noTone(BUZZER);
+      shiftSetPattern(B01110010);
+
+      // blinking orange lights
+      if (timerIsPassed(trafficTimer, NIGHT_TIMER_INTERVAL)) {
+        trafficTimer = timerReset();
+
+        // if the LED is off turn it on and vice-versa:
+        if (ledState == LOW) {
+          ledState = HIGH;
+        } else {
+          ledState = LOW;
+        }
+
+        // set the LED with the ledState of the variable:
+        digitalWrite(9, ledState);
+        digitalWrite(12, ledState);
+      }
+      break;
+    case 2:
+      servoWrite(180);
+      buzzerSlowSound();
+      setTrafficLightOrange("trafficLight1");
+      setTrafficLightOrange("trafficLight2");
+
+      currentState = 3;
+      break;
+    case 3:
+      pedestrianCrossing();
+      trafficLight1();
+      trafficLight2();
+  }
+}
+
+void pedestrianCrossing() {
   switch (currentStatePedestrianCrossing) {
     case 1:
       servoWrite(180);
       buzzerFastSound();
 
-      // show walk sign  
+      // show walk sign
       // count down from 6 to 1
       countdownDisplay();
       break;
@@ -56,8 +104,9 @@ void stateMachineLoop() {
   if (buttonPressed(PEDESTRIAN_CROSSING_DATA_PIN) && checkTrafficLightsRed()) {
     currentStatePedestrianCrossing = 1;
   }
+}
 
-  // Traffic Light 1
+void trafficLight1() {
   switch (currentStateTrafficLight1) {
     case 1:
       setTrafficLightGreen("trafficLight1");
@@ -89,8 +138,9 @@ void stateMachineLoop() {
       }
       break;
   }
+}
 
-  // Traffic Light 2
+void trafficLight2() {
   switch (currentStateTrafficLight2) {
     case 1:
       setTrafficLightGreen("trafficLight2");
